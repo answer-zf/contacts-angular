@@ -1,23 +1,66 @@
 <div class="container">
-  <form class="form-signin">
+  <form class="form-signin"
+        (submit)="signupHandle()"
+        #form="ngForm">
     <h2 class="form-signin-heading">Please sign up</h2>
     <label for="inputEmail"
            class="sr-only">Email address</label>
     <input type="email"
            id="inputEmail"
            class="form-control"
+           name="email"
            placeholder="Email address"
+           [(ngModel)]="signupForm.email"
+           email="true"
+           #email="ngModel"
            required
            autofocus>
+    <!-- 当email 是有效的/没有被碰过的，隐藏  -->
+    <!-- <div [hidden]="email.valid || email.pristine"
+         class="alert alert-danger">
+      Email is required
+    </div> -->
+    <!-- Angular 进行表单双向绑定是会为 绑定的元素提供一些特殊的类, #name -> 临时模板引用变量-->
+    <!-- <p>{{ email.className }}</p> -->
+    <!-- 多个验证提示 -->
+    <div *ngIf="email.invalid && (email.dirty || email.touched)"
+         class="alert alert-danger">
+      <div *ngIf="email.errors.required">
+        email is required.
+      </div>
+      <div *ngIf="email.errors.email">
+        Invalid Email.
+      </div>
+    </div>
+    <div *ngIf="email_err_msg"
+         class="alert alert-danger">
+      {{ email_err_msg }}
+    </div>
     <label for="inputPassword"
            class="sr-only">Password</label>
     <input type="password"
            id="inputPassword"
            class="form-control"
+           name="password"
            placeholder="Password"
+           [(ngModel)]="signupForm.password"
+           #password="ngModel"
+           minlength="8"
+           maxlength="16"
            required>
+    <div *ngIf="password.invalid && (password.dirty || password.touched)"
+         class="alert alert-danger">
+      <div *ngIf="password.errors.required">
+        password is required.
+      </div>
+      <div *ngIf="password.errors.minlength">
+        password is minlength 8.
+      </div>
+    </div>
+
     <button class="btn btn-lg btn-primary btn-block"
-            type="submit">Sign up</button>
+            type="submit"
+            [disabled]="!form.form.valid">Sign up</button>
   </form>
-  <p class="info"><a href="signin.html">Already have an account? Login here.</a></p>
+  <p class="info"><a routerLink="/signin">Already have an account? Login here.</a></p>
 </div>

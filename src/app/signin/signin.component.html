@@ -1,22 +1,57 @@
 <div class="container">
   <form class="form-signin"
-        action="index.html">
+        (submit)="signinHandle()"
+        #form="ngForm">
     <h2 class="form-signin-heading">Please sign in</h2>
     <label for="inputEmail"
            class="sr-only">Email address</label>
     <input type="email"
            id="inputEmail"
            class="form-control"
+           name="email"
            placeholder="Email address"
+           [(ngModel)]="signinForm.email"
+           email="true"
+           #email="ngModel"
+           required
            autofocus>
+    <div *ngIf="email.invalid && (email.dirty || email.touched)"
+         class="alert alert-danger">
+      <div *ngIf="email.errors.required">
+        email is required.
+      </div>
+      <div *ngIf="email.errors.email">
+        Invalid Email.
+      </div>
+    </div>
     <label for="inputPassword"
            class="sr-only">Password</label>
     <input type="password"
            id="inputPassword"
            class="form-control"
-           placeholder="Password">
+           name="password"
+           placeholder="Password"
+           [(ngModel)]="signinForm.password"
+           #password="ngModel"
+           minlength="8"
+           maxlength="16"
+           required>
+    <div *ngIf="password.invalid && (password.dirty || password.touched)"
+         class="alert alert-danger">
+      <div *ngIf="password.errors.required">
+        password is required.
+      </div>
+      <div *ngIf="password.errors.minlength">
+        password is minlength 8.
+      </div>
+    </div>
+    <div *ngIf="email_err_msg"
+         class="alert alert-danger">
+      {{ email_err_msg }}
+    </div>
     <button class="btn btn-lg btn-primary btn-block"
-            type="submit">Sign in</button>
+            type="submit"
+            [disabled]="!form.form.valid">Sign in</button>
   </form>
-  <p class="info"><a href="signup.html">Don't have an account? Create one here.</a></p>
+  <p class="info"><a routerLink="/signup">Don't have an account? Create one here.</a></p>
 </div>
